@@ -17,7 +17,7 @@
 		<script type="text/javascript" src="gatewaySDK/apigClient.js"></script>
 		<title>WEWO</title>
 	</head>
-	<body>
+	<body onload="loadTasks()">
 	<ul id="actionbar">
 		<li>
 		<div  class="title">
@@ -32,13 +32,9 @@
 		</li>
 	</ul>
 	<div id="taskcontainer">
-	<div class="task">
-	<h2>Task1</h2>
+
 	</div>
 
-	<div class="task">
-	<h2>Task2</h2>
-	</div>
 	<!--
 	<div id="login" class="login_container">
 	<form id="loginData" action="#" class="centered_horison">
@@ -50,8 +46,14 @@
 	-->
 	</body>
 	<template id="taskentry">
-		<li class="tasktitle">
-
-		</li>
+		<div class="task">
+			<h2 class="taskname">Task1</h2>
+			<div class="pricetag">
+			</div>
+			<div class="taskdescription">
+			</div>
+			<div class="tasktags">
+			</div>
+		</div>
 	</template>
 </html>
