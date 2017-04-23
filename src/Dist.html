@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="head">
+<html>
 	<head>
 		<meta charset="utf-8">
 		<link rel="stylesheet" type="text/css" href="DistStyle.css">
@@ -18,6 +18,28 @@
 		<title>WEWO</title>
 	</head>
 	<body>
+	<ul id="actionbar">
+		<li>
+		<div  class="title">
+		WEWO
+		</div>
+		</li>
+		<li>
+		<input type="search" id="searchbar" placeholder="Search using tags" />
+		</li>
+		<li>
+			<button type="button" id="signinbutton">Login</button>
+		</li>
+	</ul>
+	<div id="taskcontainer">
+	<div class="task">
+	<h2>Task1</h2>
+	</div>
+
+	<div class="task">
+	<h2>Task2</h2>
+	</div>
+	<!--
 	<div id="login" class="login_container">
 	<form id="loginData" action="#" class="centered_horison">
 	Username: <input type="text" name="userID"><br>
@@ -25,5 +47,11 @@
 	<input type="button" onclick="login()" value="login">
 	</form>
 	</div>
+	-->
 	</body>
+	<template id="taskentry">
+		<li class="tasktitle">
+
+		</li>
+	</template>
 </html>

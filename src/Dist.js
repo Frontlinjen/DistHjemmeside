@@ -7,9 +7,15 @@ function login(){
 
 
 function errorAccoured(result){
-		document.body.innerHTML = "<h1> Failed! </h1>";
+	//document.body.innerHTML = "<h1> Failed! </h1>";
+	print(result);
 }
 
+
 function recieveData(result){
-	document.body.innerHTML = "<h1> Success! " +  result + " </h1>";
+	if(result.status == 200)
+	{
+		document.body.innerHTML = "<h1> Success! " +  JSON.stringify(result.data) + " </h1>";
+	}
+	
 }
