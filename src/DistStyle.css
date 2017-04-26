@@ -62,20 +62,40 @@ input[type="text"], input[type="password"] {
 	margin: 2px;
 }
 
-
-
 #taskcontainer{
 	margin-top: 48px;
 }
 
-#searchbar{
-	height: 90%;
-	margin: 2px;
-	border: 0px;
-	padding: 2px 0px;
-	width: 100%;
-	text-indent: 16px;
+.searchbar {
+    height: 100%;
+    width: 100%;
+    margin: 2px 0px 2px 0px;
+    border: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
+
+.searchbar input {
+    height: 44px;
+    width: 80%;
+    position: relative;
+    float: left;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    text-indent: 16px;
+}
+
+.searchbar button {
+    height: 44px;
+    width: 20%;
+    position: relative;
+    float: right;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    color: #fff;
+    background: #1B3B4A;
+}  
 
 .title{
 	text-align: left;
@@ -119,7 +139,7 @@ input[type="text"], input[type="password"] {
 
 
 input[type="text"]:focus, input[type="password"]:focus {
-	border: 2px solid blue;	
+	box-shadow: 2px solid blue;
 }
 
 input[type="button"]{

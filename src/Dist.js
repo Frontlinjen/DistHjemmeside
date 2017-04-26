@@ -43,3 +43,20 @@ function recieveData(result){
 	
 	
 }
+
+function search(result){
+	result.toLowerCase();
+	var arr = result.split(" ");
+	var arrn = [];
+	var errortext = "Følgende tags eksisterer ikke: <br>";
+	var i;
+	for(i = 0; i < arr.length; i++){
+		if(tags[arr[i]] == undefined){
+			text += arr[i] + "<br>";
+		}
+		else{
+			arrn.push(tags[arr[i]]);
+		}
+	}
+	
+}

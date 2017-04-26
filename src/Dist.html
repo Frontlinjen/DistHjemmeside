@@ -15,6 +15,7 @@
 		<script type="text/javascript" src="gatewaySDK/lib/apiGatewayCore/simpleHttpClient.js"></script>
 		<script type="text/javascript" src="gatewaySDK/lib/apiGatewayCore/utils.js"></script>
 		<script type="text/javascript" src="gatewaySDK/apigClient.js"></script>
+		<script type="text/javascript" src="tags.js"></script>
 		<title>WEWO</title>
 	</head>
 	<body onload="loadTasks()">
@@ -25,8 +26,24 @@
 		</div>
 		</li>
 		<li>
-		<input type="search" id="searchbar" placeholder="Search using tags" />
+		<div class="searchbar">
+			<form>
+        		<input type="text" onsubmit="search()" placeholder="Search using tags" required>
+        		<button type="submit">Search</button>
+    		</form>
 		</li>
+		<!--
+		<li>
+			<form onsubmit="search()" style="height: 48px">
+				<span class="input-group-btn">
+					<input type="search" id="searchbar" placeholder="Search using tags">
+                        <button class="btn btn-default" type="button">
+                        <img height="48px" width="48px" src="img/SearchIcon.png"></button>
+					</input>
+				</span>
+			</form>
+		</li>
+		-->
 		<li>
 			<button type="button" id="signinbutton">Login</button>
 		</li>
