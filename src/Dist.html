@@ -18,7 +18,7 @@
 		<script type="text/javascript" src="tags.js"></script>
 		<title>WEWO</title>
 	</head>
-	<body onload="loadTasks()">
+	<body>
 	<ul id="actionbar">
 		<li>
 		<div  class="title">
@@ -27,10 +27,8 @@
 		</li>
 		<li>
 		<div class="searchbar">
-			<form>
-        		<input type="text" onsubmit="search()" placeholder="Search using tags" required>
-        		<button type="submit">Search</button>
-    		</form>
+        		<input type="text" id="searchTags" placeholder="Search using tags" required>
+        		<button type="button" onclick="search(); return false;" target="#">Search</button>
 		</li>
 		<!--
 		<li>

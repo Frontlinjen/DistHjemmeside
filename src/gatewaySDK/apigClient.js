@@ -52,7 +52,7 @@ apigClientFactory.newClient = function (config) {
     }
 
     
-    // extract endpoint and path from url
+    // extract endpoint and path from url'http://localhost:5000';//
     var invokeUrl = 'https://70r7hyxz72.execute-api.eu-west-1.amazonaws.com/development';
     var endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1];
     var pathComponent = invokeUrl.substring(endpoint.length);
@@ -209,16 +209,52 @@ apigClientFactory.newClient = function (config) {
     };
     
     
-    apigClient.tasksGet = function (params, body, additionalParams) {
+    apigClient.tagsGet = function (params, body, additionalParams) {
         if(additionalParams === undefined) { additionalParams = {}; }
         
         apiGateway.core.utils.assertParametersDefined(params, [], ['body']);
+        
+        var tagsGetRequest = {
+            verb: 'get'.toUpperCase(),
+            path: pathComponent + uritemplate('/tags').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
+            headers: apiGateway.core.utils.parseParametersToObject(params, []),
+            queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
+            body: body
+        };
+        
+        
+        return apiGatewayClient.makeRequest(tagsGetRequest, authType, additionalParams, config.apiKey);
+    };
+    
+    
+    apigClient.tagsOptions = function (params, body, additionalParams) {
+        if(additionalParams === undefined) { additionalParams = {}; }
+        
+        apiGateway.core.utils.assertParametersDefined(params, [], ['body']);
+        
+        var tagsOptionsRequest = {
+            verb: 'options'.toUpperCase(),
+            path: pathComponent + uritemplate('/tags').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
+            headers: apiGateway.core.utils.parseParametersToObject(params, []),
+            queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
+            body: body
+        };
+        
+        
+        return apiGatewayClient.makeRequest(tagsOptionsRequest, authType, additionalParams, config.apiKey);
+    };
+    
+    
+    apigClient.tasksGet = function (params, body, additionalParams) {
+        if(additionalParams === undefined) { additionalParams = {}; }
+        
+        apiGateway.core.utils.assertParametersDefined(params, ['tags'], ['body']);
         
         var tasksGetRequest = {
             verb: 'get'.toUpperCase(),
             path: pathComponent + uritemplate('/tasks').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
             headers: apiGateway.core.utils.parseParametersToObject(params, []),
-            queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
+            queryParams: apiGateway.core.utils.parseParametersToObject(params, ['tags']),
             body: body
         };
         
@@ -296,6 +332,24 @@ apigClientFactory.newClient = function (config) {
         
         
         return apiGatewayClient.makeRequest(tasksTaskIDDeleteRequest, authType, additionalParams, config.apiKey);
+    };
+    
+    
+    apigClient.tasksTaskIDOptions = function (params, body, additionalParams) {
+        if(additionalParams === undefined) { additionalParams = {}; }
+        
+        apiGateway.core.utils.assertParametersDefined(params, [], ['body']);
+        
+        var tasksTaskIDOptionsRequest = {
+            verb: 'options'.toUpperCase(),
+            path: pathComponent + uritemplate('/tasks/{taskID}').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
+            headers: apiGateway.core.utils.parseParametersToObject(params, []),
+            queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
+            body: body
+        };
+        
+        
+        return apiGatewayClient.makeRequest(tasksTaskIDOptionsRequest, authType, additionalParams, config.apiKey);
     };
     
     
