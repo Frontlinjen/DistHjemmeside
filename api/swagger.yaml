@@ -1,0 +1,613 @@
+swagger: '2.0'
+
+info:
+  version: "0.0.1"
+  title: WEWO
+
+paths:
+  /tasks:
+    get:
+      summary: Queries tasks from tags
+      description: Queries a tasks and returns a list of tasks
+      parameters:
+        - name: tag
+          required: true
+          in: query
+          type: array
+          items: 
+            type: integer
+          collectionFormat: multi
+        - name: page
+          in: query
+          type: integer
+        - name: count
+          in: query
+          type: integer
+      responses:
+        "200":
+          description: Returns a list of tasks
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Task'
+        "400":
+          description: Invalid tags were specified
+        "401":
+          description: User is not logged in or session has expired'
+      security:
+      - sigv4: []
+    post:
+      summary: Creates a new task
+      description: Creates a new task and returns the ID of that task
+      parameters:
+        - name: taskdata
+          in: body
+          description: The information for the task to be created
+          required: true
+          schema:
+            $ref: '#/definitions/Task'
+      responses:
+        200:
+          description: The identifier of the newly created task
+          schema:
+            type: object
+            properties:
+              taskID:
+                type: integer
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /tasks/{taskID}:
+    get:
+      summary: Gets the task at ID
+      parameters:
+        - name: taskID
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: The requested task
+          schema:
+            $ref: '#/definitions/Task'
+        404:
+          description: Not found
+    put:
+      summary: Updates the task, but only if the currently logged in user is the owner
+      parameters:
+        - name: taskdata
+          in: body
+          description: Latitude component of location.
+          required: true
+          schema:
+            $ref: '#/definitions/Task'
+        - name: taskID
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: update successfull
+        404:
+          description: Not found
+    delete:
+      summary: Delete the task at ID, but only if the currently logged in usr is the owner
+      parameters: 
+         - name: taskID
+           in: path
+           type: string
+           required: true
+      responses:
+        200:
+          description: delete was successfull
+        404:
+          description: Not found
+  /tasks/{taskID}/images:
+    get:
+      summary: Get a list of images assigned to this task
+      parameters:
+        - name: taskID
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: The requested task
+          schema:
+            $ref: '#/definitions/StringArray'
+        404:
+          description: Task not found
+    post:
+      summary: Adds an image to this task. Not implemented for now
+      parameters:
+        - name: taskID
+          in: path
+          type: string
+          required: true
+      responses:
+          200:
+            description: The id of the newly added image
+  
+  /tasks/{taskID}/comments:
+    get:
+      summary: comments type
+      description: Gets all comments of a task
+      parameters:
+        - in: path
+          name: taskID
+          description: ID of the task
+          required: true
+          type: integer
+          format: int32
+      responses:
+        404:
+          description: Task not found
+        200:
+          description: Successful operation
+          schema: 
+            $ref: '#/definitions/StringArray'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+ 
+    post:
+      summary: Adds a new comment to a task
+      parameters:
+        - name: newComment
+          in: body
+          description: new comment
+          required: true
+          schema:
+            $ref: '#/definitions/Comment'
+        - name: taskID
+          in: path
+          type: number
+          format: int32
+          required: true
+      responses:
+        "404": 
+           description: Task not found
+        "200": 
+           description: Successful operation
+            
+          
+  /tasks/{taskID}/comments/{commentID}:
+    get:
+      summary: Get the specific comment
+      parameters:
+        - in: path
+          name: taskID
+          description: ID of the task the comment is contained in
+          type: number
+          required: true
+          format: int32
+        - in: path
+          name: commentID
+          description: ID of the comment in the specific task
+          type: number
+          required: true
+          format: int32
+      responses:
+        "404":
+          description: Comment not found
+        "200":
+          description: Succesful operation
+          schema:
+            $ref: '#/definitions/Comment'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
+    delete:
+      summary: Removes the comment
+      parameters:
+        - in: path
+          name: taskID
+          description: ID of task the comment is contained in
+          type: number
+          required: true
+          format: int32
+        - in: path
+          name: commentID
+          description: ID of the comment in the specific task
+          type: number
+          required: true
+          format: int32
+      responses:
+        "404":
+          description: Comment not found
+        "200":
+          description: Succesful operation
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+          
+    put:
+      summary: Edits the comment
+      parameters:
+        - in: path
+          name: taskID
+          description: ID of task the comment is contained in
+          type: integer
+          required: true
+          format: int32
+        - in: path
+          name: commentID
+          description: ID of comment in the specific task
+          type: integer
+          required: true
+          format: int32 
+        - in: body
+          name: comment
+          description: context of the comment
+          required: true
+          schema:
+            $ref: '#/definitions/Comment'
+      responses:
+        "404":
+          description: Account not found
+        "200":
+          description: Succesful edited
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  
+  /tasks/{taskID}/applicants:
+    get:
+      summary: Gets a list of applications for task
+      description: Gets a list of applications for task
+      operationId: getApplicationsForID
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: taskID
+          description: ID of the applications
+          required: true
+          type: integer
+      responses:
+        404:
+          description: Application not found
+        200:
+          description: Successful operation
+          schema: 
+            $ref: '#/definitions/StringArray'
+        400:
+          description: Invalid ID supplied
+    post:
+      summary: Applies to a task
+      description: Applies to a task
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: applicants
+          description: Application info
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: taskID
+          description: ID of the application
+          required: true
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: Successful operation
+   
+  /tasks/{taskID}/applicants/{applierID}:
+    get:
+      summary: Gets specific application status
+      parameters:
+        - in: path
+          name: applierID
+          description: ID of the Application
+          required: true
+          type: integer
+          format: int32
+        - in: path
+          name: taskID
+          description: ID
+          required: true
+          type: integer
+          format: int32
+      responses:
+        404:
+          description: Application not found
+        200:
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/String'
+        400:
+          description:  Invalid ID supplier
+  
+  /account/{ID}:
+    get:
+      summary: Gets information about account with ID
+      description: Gets information about account with ID
+      operationId: getUserByID
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: ID
+          description: ID of the account
+          required: true
+          type: integer
+          format: int32
+      responses:
+        "404":
+          description: Account not found
+        "200":
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/Account"
+        "400":
+          description: Invalid ID supplied
+    put:
+      summary: Updates an account
+      description: Updates an account
+      operationId: updateAccount
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: ID
+          description: ID of the account
+          required: true
+          type: integer
+          format: int32
+        - in: body
+          name: account
+          description: The updated account
+          required: true
+          schema:
+            $ref: "#/definitions/Account"
+      responses:
+        "404":
+          description: Account not found
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid ID supplied
+  /account:
+    post:
+      summary: Creates new profile
+      description: Creates new profile
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Account info
+          required: true
+          schema:
+            $ref: "#/definitions/Account"
+      responses:
+        "200":
+          description: Successful operation
+        #ID already in use
+    
+  /account/{ID}/tasks:
+    get:
+      summary: Gets all tasks created by account ID
+      description: Gets all tasks created by account ID
+      operationId: getTasksCreateByID
+      produces: 
+        - application/json
+      parameters:
+        - in: path
+          name: ID
+          description: ID of the account
+          required: true
+          type: integer
+          format: int32
+      responses:
+        404:
+          description: No tasks found
+        200:
+          description: Successful operation
+          schema: 
+            $ref: '#/definitions/StringArray'
+        400: 
+          description: Invalid ID supplied
+  
+  /account/applied:
+    get:
+      summary: Gets a list of all tasks the user has applied to
+      description: Gets a list of all tasks the user has applied to
+      operationId: getTasksAppliedToByID
+      produces: 
+        - application/json
+      responses:
+        404:
+          description: Account not found
+        200:
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/StringArray'
+        400: 
+          description: Invalid ID supplied
+          
+  /account/{ID}/ratings/{ratingID}:
+      get:
+        summary: Gets last 5 ratings for profile ID
+        description: Gets last 5 ratings for profile ID
+        operationId: getRatingsForID
+        produces: 
+          - application/json
+        parameters:
+          - in: path
+            name: ratingID
+            type: integer
+            description: Number of rating
+            required: true
+          - in: path
+            name: ID
+            type: integer
+            description: The account ID
+            required: true
+        responses:
+          404:
+            description: Ratings not found
+          200:
+            description: Successful operation
+            schema:
+              type: array
+              items:
+                $ref: '#/definitions/Ratings'
+          400: 
+            description: Invalid ID supplied
+      post:
+        summary: Creates a rating for profile ID
+        description: Creates a rating for profile ID
+        consumes:
+          - application/json
+        produces:
+          - application/json
+        parameters:
+          - in: path
+            name: ratingID
+            type: integer
+            description: Number of rating
+            required: true
+          - in: path
+            name: ID
+            type: integer
+            description: The account ID
+            required: true
+        responses:
+          200:
+            description: Successful operation
+          #ID already in use
+securityDefinitions:
+  sigv4:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+    x-amazon-apigateway-authtype: "awsSigv4"
+definitions:
+  String:
+    type: object
+    properties:
+        status:
+          type: string
+  StringArray:
+    type: array
+    items:
+      type: object
+      properties:
+        status:
+          type: string
+  Comment:
+    type: object
+    properties:
+      message:
+        type: string
+        description: The comment
+      commenter:
+        type: string
+        description: The userID of the guy who commented
+      date:
+        type: string
+        description: When the comment was last updated
+      commentID:
+        type: integer
+        description: The id of this comment
+      taskID: 
+        type: integer 
+        description: The id of the task this comment belongs to
+  Task:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: the ID identifying this task
+      title:
+        type: string
+        maxLength: 256
+      description:
+        type: string
+        maxLength: 512
+      price:
+        type: number
+        description: The price for completion of the task
+      ECT:
+        type: integer
+        description: The estimated completion time in minutes
+      supplies:
+        type: integer
+        description: Are relevant supplies available for the task should be 0 or 1
+      urgent:
+        type: integer
+        description: Is the task urgent(expires after six hours) should be 0 or 1
+      views:
+        type: integer
+        description: How many views has this task had? Readonly
+      street:
+        type: string
+        maxLength: 128
+      zipaddress:
+        type: integer
+      creatorid:
+        type: string
+        description: The userID of the creator if this task Readonly
+      tags:
+        type: array
+        items:
+          type: integer
+          minimum: 3
+          maximum: 63
+          
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+  
+  Account:
+    type: object
+    properties:
+      userID:
+        type: string
+      name:
+        type: string
+      email:
+        type: string
+      phone:
+        type: string
+      sex: # Male = true, female = false. Dont even try, I will cut you.
+        type: boolean
+      aboutMe:
+        type: string
+      competences:
+        type: array
+        items:
+          type: string
+      #profilePhoto:
+      #idleLocation:
+  Ratings:
+    type: object
+    properties:
+      rating:
+        type: integer
+      description:
+        type: string
+#ratee:
